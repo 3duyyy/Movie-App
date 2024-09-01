@@ -1,5 +1,13 @@
+import Header from "./components/Header";
+import FeatureMovies from "./components/FeatureMovies";
+
 function App() {
-  return <p className="font-bold text-lg">Movie App</p>;
+  return (
+    <div>
+      <Header />
+      <FeatureMovies />
+    </div>
+  );
 }
 
 export default App;
