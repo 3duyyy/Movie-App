@@ -23,7 +23,7 @@ const FeatureMovies = () => {
   }, []);
 
   return (
-    <div>
+    <div className="relative">
       {movies &&
         movies
           .filter((movie) => movie.id === activeMovieId)

@@ -45,7 +45,7 @@ const MediaList = ({ title, tabs }) => {
           ))}
         </ul>
       </div>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6 lg:gap-6">
         {mediaList &&
           mediaList.map((media) => (
             <MediaCard
@@ -54,7 +54,7 @@ const MediaList = ({ title, tabs }) => {
               release_date={media.release_date || media.first_air_date}
               poster={media.poster_path}
               point={Math.round(media.vote_average) * 10}
-              mediaType={media.media_type}
+              mediaType={media.media_type || activeTabId}
             />
           ))}
       </div>
