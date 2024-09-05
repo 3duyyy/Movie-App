@@ -1,6 +1,6 @@
 // import React from 'react'
 import PropTypes from "prop-types";
-import CircularProgressBar from "./CircularProgressBar";
+import CircularProgressBar from "../CircularProgressBar";
 
 const MediaCard = ({ title, release_date, poster, point, mediaType }) => {
   return (
