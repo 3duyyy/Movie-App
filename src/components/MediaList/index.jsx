@@ -1,6 +1,6 @@
 // import React from "react";
 import { useEffect } from "react";
-import MediaCard from "./MediaCard";
+import MediaCard from "@components/MediaCard";
 import { useState } from "react";
 import PropTypes from "prop-types";
 
@@ -27,8 +27,6 @@ const MediaList = ({ title, tabs }) => {
     }
   }, [activeTabId, tabs]);
 
-  console.log(mediaList);
-
   return (
     <div className="bg-black px-8 py-10 text-[1.2vw] text-white">
       <div className="mb-6 flex items-center gap-4">
@@ -49,6 +47,7 @@ const MediaList = ({ title, tabs }) => {
         {mediaList &&
           mediaList.map((media) => (
             <MediaCard
+              id={media.id}
               key={media.id}
               title={media.title || media.name}
               release_date={media.release_date || media.first_air_date}

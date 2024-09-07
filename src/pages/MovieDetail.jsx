@@ -1,57 +1,84 @@
 // import React from "react";
-
-import { faPlay } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import CircularProgressBar from "../components/CircularProgressBar";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import Loading from "@components/Loading";
+import Banner from "@components/MediaDetail/Banner";
+import ActorList from "@components/MediaDetail/ActorList";
+import RelatedMediaList from "@components/MediaDetail/RelatedMediaList";
 
 const MovieDetail = () => {
+  const { id } = useParams();
+  const [movieInfo, setMovieInfo] = useState({});
+  const [relatedMovie, setRelatedMovie] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRelatedMovieListLoading, setIsRelatedMovieListLoading] =
+    useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetch(
+      `https://api.themoviedb.org/3/movie/${id}?append_to_response=release_dates,credits`,
+      {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYThkNTMzZDEwZDhiZDJiNDg2ZTllY2JkZGZiM2VmNiIsIm5iZiI6MTcyNTM3ODQzNC44NDQ1NjgsInN1YiI6IjY2YzllYTdmYjg2N2EwYWVkZGZiOWU3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.DOp8iziLMf8M0kfZdMWe0jA8e_BWEcKHds-Dcz4iLTc",
+        },
+      },
+    )
+      .then(async (res) => {
+        const data = await res.json();
+        setMovieInfo(data);
+      })
+      .catch((err) => {
+        console.log({ err });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [id, setMovieInfo]);
+
+  console.log({ movieInfo });
+
+  useEffect(() => {
+    setIsRelatedMovieListLoading(true);
+    fetch(`https://api.themoviedb.org/3/movie/${id}/recommendations`, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYThkNTMzZDEwZDhiZDJiNDg2ZTllY2JkZGZiM2VmNiIsIm5iZiI6MTcyNTM3ODQzNC44NDQ1NjgsInN1YiI6IjY2YzllYTdmYjg2N2EwYWVkZGZiOWU3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.DOp8iziLMf8M0kfZdMWe0jA8e_BWEcKHds-Dcz4iLTc",
+      },
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        const currentRelatedMovie = (data.results || []).slice(0, 12);
+        setRelatedMovie(currentRelatedMovie);
+      })
+      .catch((err) => {
+        console.log({ err });
+      })
+      .finally(() => {
+        setIsRelatedMovieListLoading(false);
+      });
+  }, [id, setIsRelatedMovieListLoading]);
+
+  if (isLoading || isRelatedMovieListLoading) {
+    return <Loading />;
+  }
+
   return (
-    <div className="relative overflow-hidden text-white">
-      <img
-        src="https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/NNC08YmJFFlLi1prBkK8quk3dp.jpg"
-        className="absolute inset-0 brightness-[.2]"
-      />
-      <div className="relative mx-auto flex max-w-screen-xl gap-6 px-6 py-10 lg:gap-8">
-        <div className="flex-1">
-          <img src="https://media.themoviedb.org/t/p/w300_and_h450_bestv2/mYLOqiStMxDK3fYZFirgrMt8z5d.jpg" />
-        </div>
-        <div className="flex-[2] text-[1.2vw]">
-          <p className="mb-2 text-[1.8vw] font-bold">Test</p>
-          <div className="flex items-center gap-8">
-            <span className="border border-gray-400 p-1 text-gray-400">G</span>
-            <p>2024-11-11</p>
-            <p>Action & Adventure, Sci-Fi & Fantasy</p>
+    <div>
+      <Banner mediaInfo={movieInfo} />
+      <div className="bg-black text-[1.2vw] text-white">
+        <div className="mx-auto flex max-w-screen-xl gap-6 px-6 py-10">
+          <div className="flex-[2]">
+            <ActorList actors={movieInfo.credits?.cast || []} />
+            <RelatedMediaList mediaList={relatedMovie} />
           </div>
-          <div className="mt-4 flex items-center gap-12">
-            <div className="flex items-center gap-2">
-              <CircularProgressBar percent={90} size={3} strokeWidth={0.3} />
-              Rating
-            </div>
-            <button>
-              <FontAwesomeIcon icon={faPlay} className="mr-1" />
-              Trailer
-            </button>
-          </div>
-          <div className="mt-4">
-            <p className="mb-2 text-[1.3vw] font-bold">Overview</p>
-            <p>
-              Beginning in a time of relative peace, we follow a group of
-              characters confronting the resurgence of evil in Middle-earth.
-              From the darkest depths of the Misty Mountains, to the majestic
-              forests of Lindon, to the breathtaking island kingdom of Númenor,
-              to the furthest reaches of the map. Even in their demise, these
-              kingdoms and characters leave lasting legacies.
-            </p>
-          </div>
-          <div className="mt-4 grid grid-cols-2 gap-2">
-            <div>
-              <p className="font-bold">Director</p>
-              <p>Jennifer Phang</p>
-            </div>
-            <div>
-              <p className="font-bold">Writter</p>
-              <p>Creator</p>
-            </div>
+          <div className="flex-1">
+            <p className="mb-4 text-[1.4vw] font-bold">Infomation</p>
           </div>
         </div>
       </div>
