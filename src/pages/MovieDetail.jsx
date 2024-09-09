@@ -5,6 +5,7 @@ import Loading from "@components/Loading";
 import Banner from "@components/MediaDetail/Banner";
 import ActorList from "@components/MediaDetail/ActorList";
 import RelatedMediaList from "@components/MediaDetail/RelatedMediaList";
+import MovieInformation from "@components/MediaDetail/MovieInformation";
 
 const MovieDetail = () => {
   const { id } = useParams();
@@ -47,8 +48,7 @@ const MovieDetail = () => {
       method: "GET",
       headers: {
         accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYThkNTMzZDEwZDhiZDJiNDg2ZTllY2JkZGZiM2VmNiIsIm5iZiI6MTcyNTM3ODQzNC44NDQ1NjgsInN1YiI6IjY2YzllYTdmYjg2N2EwYWVkZGZiOWU3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.DOp8iziLMf8M0kfZdMWe0jA8e_BWEcKHds-Dcz4iLTc",
+        Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
       },
     })
       .then(async (res) => {
@@ -72,13 +72,13 @@ const MovieDetail = () => {
     <div>
       <Banner mediaInfo={movieInfo} />
       <div className="bg-black text-[1.2vw] text-white">
-        <div className="mx-auto flex max-w-screen-xl gap-6 px-6 py-10">
+        <div className="mx-auto flex max-w-screen-xl gap-6 px-6 py-10 sm:gap-8">
           <div className="flex-[2]">
             <ActorList actors={movieInfo.credits?.cast || []} />
             <RelatedMediaList mediaList={relatedMovie} />
           </div>
           <div className="flex-1">
-            <p className="mb-4 text-[1.4vw] font-bold">Infomation</p>
+            <MovieInformation movieInfo={movieInfo} />
           </div>
         </div>
       </div>
