@@ -1,68 +1,34 @@
-// import React from "react";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import Loading from "@components/Loading";
 import Banner from "@components/MediaDetail/Banner";
 import ActorList from "@components/MediaDetail/ActorList";
 import RelatedMediaList from "@components/MediaDetail/RelatedMediaList";
 import MovieInformation from "@components/MediaDetail/MovieInformation";
+import useFetch from "@hooks/useFetch";
 
 const MovieDetail = () => {
   const { id } = useParams();
-  const [movieInfo, setMovieInfo] = useState({});
-  const [relatedMovie, setRelatedMovie] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isRelatedMovieListLoading, setIsRelatedMovieListLoading] =
-    useState(false);
 
-  useEffect(() => {
-    setIsLoading(true);
-    fetch(
-      `https://api.themoviedb.org/3/movie/${id}?append_to_response=release_dates,credits`,
-      {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYThkNTMzZDEwZDhiZDJiNDg2ZTllY2JkZGZiM2VmNiIsIm5iZiI6MTcyNTM3ODQzNC44NDQ1NjgsInN1YiI6IjY2YzllYTdmYjg2N2EwYWVkZGZiOWU3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.DOp8iziLMf8M0kfZdMWe0jA8e_BWEcKHds-Dcz4iLTc",
-        },
-      },
-    )
-      .then(async (res) => {
-        const data = await res.json();
-        setMovieInfo(data);
-      })
-      .catch((err) => {
-        console.log({ err });
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [id, setMovieInfo]);
+  const { data: movieInfo, isLoading } = useFetch({
+    url: `/movie/${id}?append_to_response=release_dates,credits,videos`,
+  });
 
-  console.log({ movieInfo });
+  const { data: recommendationsResponse, isLoading: isRelatedMovieListLoading } = useFetch({
+    url: `/movie/${id}/recommendations`,
+  });
 
-  useEffect(() => {
-    setIsRelatedMovieListLoading(true);
-    fetch(`https://api.themoviedb.org/3/movie/${id}/recommendations`, {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
-      },
-    })
-      .then(async (res) => {
-        const data = await res.json();
-        const currentRelatedMovie = (data.results || []).slice(0, 12);
-        setRelatedMovie(currentRelatedMovie);
-      })
-      .catch((err) => {
-        console.log({ err });
-      })
-      .finally(() => {
-        setIsRelatedMovieListLoading(false);
-      });
-  }, [id, setIsRelatedMovieListLoading]);
+  const relatedMovies = (recommendationsResponse && recommendationsResponse.results) || [];
+
+  console.log({ movieInfo, relatedMovies });
+
+  const certification = (
+    (movieInfo.release_dates?.results || []).find((result) => result.iso_3166_1 === "US")
+      ?.release_dates || []
+  ).find((releaseDate) => releaseDate.certification)?.certification;
+
+  const crews = (movieInfo.credits?.crew || [])
+    .filter((crew) => ["Director", "Screenplay", "Writer"].includes(crew.job))
+    .map((crew) => ({ id: crew.id, job: crew.job, name: crew.name }));
 
   if (isLoading || isRelatedMovieListLoading) {
     return <Loading />;
@@ -70,12 +36,25 @@ const MovieDetail = () => {
 
   return (
     <div>
-      <Banner mediaInfo={movieInfo} />
+      <Banner
+        title={movieInfo.title}
+        backdropPath={movieInfo.backdrop_path}
+        posterPath={movieInfo.poster_path}
+        releaseDate={movieInfo.release_date}
+        genres={movieInfo.genres}
+        point={movieInfo.vote_average}
+        overview={movieInfo.overview}
+        certification={certification}
+        crews={crews}
+        trailerVideoKeys={
+          (movieInfo.videos?.results || []).find((video) => video.type === "Trailer")?.key
+        }
+      />
       <div className="bg-black text-[1.2vw] text-white">
-        <div className="mx-auto flex max-w-screen-xl gap-6 px-6 py-10 sm:gap-8">
+        <div className="mx-auto flex max-w-screen-xl gap-4 px-6 py-10 sm:gap-6">
           <div className="flex-[2]">
             <ActorList actors={movieInfo.credits?.cast || []} />
-            <RelatedMediaList mediaList={relatedMovie} />
+            <RelatedMediaList mediaList={relatedMovies} />
           </div>
           <div className="flex-1">
             <MovieInformation movieInfo={movieInfo} />

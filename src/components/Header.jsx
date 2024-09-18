@@ -1,7 +1,6 @@
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-// import React from "react";
 
 const Header = () => {
   return (
@@ -19,10 +18,7 @@ const Header = () => {
           </a>
         </div>
         <div>
-          <FontAwesomeIcon
-            icon={faMagnifyingGlass}
-            className="cursor-pointer"
-          />
+          <FontAwesomeIcon icon={faMagnifyingGlass} className="cursor-pointer" />
         </div>
       </header>
     </div>

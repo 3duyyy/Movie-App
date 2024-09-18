@@ -19,7 +19,7 @@ const CircularProgressBar = ({ percent, size = 3, strokeWidth = 0.25 }) => {
           cx={`${size / 2}vw`}
           cy={`${size / 2}vw`}
           fill="none"
-          stroke={percent >= 70 ? "green" : percent >= 50 ? "yellow" : "red"}
+          stroke={percent >= 80 ? "green" : percent >= 50 ? "yellow" : "red"}
           strokeWidth={`${strokeWidth}vw`}
           strokeDasharray={`${p}vw`}
           strokeDashoffset={`${p - (percent / 100) * p}vw`}

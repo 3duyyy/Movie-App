@@ -5,9 +5,7 @@ import { useEffect } from "react";
 const PaginateIndicator = ({ movies, activeMovieId, setActiveMovieId }) => {
   useEffect(() => {
     const interval = setInterval(() => {
-      const currentIndex = movies.findIndex(
-        (movie) => movie.id === activeMovieId,
-      );
+      const currentIndex = movies.findIndex((movie) => movie.id === activeMovieId);
       if (currentIndex !== -1) {
         const nextIndex = (currentIndex + 1) % movies.length;
         setActiveMovieId(movies[nextIndex].id);

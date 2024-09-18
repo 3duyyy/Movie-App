@@ -10,7 +10,7 @@ const ActorList = ({ actors = [] }) => {
 
   return (
     <div>
-      <p className="mb-4 text-[1.4vw] font-bold">Actors</p>
+      <p className="mb-4 text-[1.6vw] font-bold">Actors</p>
       <div className="grid grid-cols-3 gap-4 sm:grid-cols-4 sm:gap-6">
         {currentActors.map((actor) => (
           <ActorInfo
@@ -19,13 +19,11 @@ const ActorList = ({ actors = [] }) => {
             name={actor.name}
             character={actor.character}
             profilePath={actor.profile_path}
+            episodeCount={actor.episodeCount}
           />
         ))}
       </div>
-      <p
-        className="mt-2 cursor-pointer text-slate-400"
-        onClick={() => setIsShowMore(!isShowMore)}
-      >
+      <p className="mt-2 cursor-pointer text-slate-400" onClick={() => setIsShowMore(!isShowMore)}>
         {isShowMore ? "Show less" : "Show more"}
       </p>
     </div>
