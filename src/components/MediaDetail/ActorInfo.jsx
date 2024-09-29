@@ -1,16 +1,13 @@
 // import React from "react";
 import ImageComponent from "@components/ImageComponent";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
-const ActorInfo = ({ name, character, profilePath, episodeCount }) => {
+const ActorInfo = ({ id, name, character, profilePath, episodeCount }) => {
   return (
-    <div className="rounded-lg border border-slate-300 shadow-sm">
+    <Link to={`/people/${id}`} className="rounded-lg border border-slate-300 shadow-sm">
       <ImageComponent
-        src={
-          profilePath
-            ? `https://media.themoviedb.org/t/p/w276_and_h350_face/${profilePath}`
-            : "/ActorNoImage.svg"
-        }
+        src={profilePath && `https://media.themoviedb.org/t/p/w276_and_h350_face/${profilePath}`}
         className="w-full rounded-lg"
         width={276}
         height={350}
@@ -22,7 +19,7 @@ const ActorInfo = ({ name, character, profilePath, episodeCount }) => {
           {episodeCount} {episodeCount > 1 ? "Episodes" : episodeCount === 1 ? "Episode" : ""}
         </p>
       </div>
-    </div>
+    </Link>
   );
 };
 

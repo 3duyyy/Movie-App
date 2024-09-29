@@ -1,12 +1,13 @@
 // import React from "react";
-// import { useEffect } from "react";
 import MediaCard from "@components/MediaCard";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import useFetch from "@hooks/useFetch";
 
 const MediaList = ({ title, tabs }) => {
-  const [activeTabId, setActiveTabId] = useState(tabs[0]?.id);
+  const [activeTabId, setActiveTabId] = useState(tabs[0].id);
+
+  console.log(activeTabId);
 
   const url = tabs.find((tab) => tab.id === activeTabId)?.url;
 

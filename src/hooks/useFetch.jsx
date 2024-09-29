@@ -6,30 +6,35 @@ const DEFAULT_HEADERS = {
   Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
 };
 
-export default function useFetch({ url = "", method = "GET", headers = {} }) {
+export default function useFetch(
+  { url = "", method = "GET", headers = {} },
+  { enabled } = { enabled: true },
+) {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
-    fetch(`${import.meta.env.VITE_API_HOST}${url}`, {
-      method,
-      headers: {
-        ...DEFAULT_HEADERS,
-        ...headers,
-      },
-    })
-      .then(async (res) => {
-        const data = await res.json();
-        setData(data);
+    if (enabled) {
+      setIsLoading(true);
+      fetch(`${import.meta.env.VITE_API_HOST}${url}`, {
+        method,
+        headers: {
+          ...DEFAULT_HEADERS,
+          ...headers,
+        },
       })
-      .catch((err) => {
-        console.log({ err });
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [url, method, JSON.stringify(headers)]);
+        .then(async (res) => {
+          const data = await res.json();
+          setData(data);
+        })
+        .catch((err) => {
+          console.log({ err });
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [url, method, JSON.stringify(headers), enabled]);
 
   return { data, isLoading };
 }

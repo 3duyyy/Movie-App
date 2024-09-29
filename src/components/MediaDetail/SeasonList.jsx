@@ -18,7 +18,9 @@ const SeasonList = ({ seasons = [] }) => {
             className="flex items-center gap-6 rounded-lg border border-slate-200 p-3 shadow-md"
           >
             <ImageComponent
-              src={`https://media.themoviedb.org/t/p/w300${season.poster_path}`}
+              src={
+                season.poster_path && `https://media.themoviedb.org/t/p/w300${season.poster_path}`
+              }
               width={130}
               height={195}
               className="w-1/4 rounded-lg"
@@ -38,12 +40,14 @@ const SeasonList = ({ seasons = [] }) => {
           </div>
         ))}
       </div>
-      <p
-        className="mt-2 cursor-pointer text-[1.3vw] text-slate-400"
-        onClick={() => setIsShowMore(!isShowMore)}
-      >
-        {isShowMore ? "Show less" : "Show more"}
-      </p>
+      {seasons.length > 3 && (
+        <p
+          className="mt-2 cursor-pointer text-[1.3vw] text-slate-400"
+          onClick={() => setIsShowMore(!isShowMore)}
+        >
+          {isShowMore ? "Show less" : "Show more"}
+        </p>
+      )}
     </div>
   );
 };

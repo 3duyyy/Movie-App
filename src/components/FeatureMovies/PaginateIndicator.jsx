@@ -10,7 +10,7 @@ const PaginateIndicator = ({ movies, activeMovieId, setActiveMovieId }) => {
         const nextIndex = (currentIndex + 1) % movies.length;
         setActiveMovieId(movies[nextIndex].id);
       }
-    }, 5000);
+    }, 7000);
 
     return () => clearInterval(interval);
   }, [activeMovieId, movies, setActiveMovieId]);

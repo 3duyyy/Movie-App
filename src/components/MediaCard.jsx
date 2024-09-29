@@ -15,7 +15,7 @@ const MediaCard = ({ id, title, release_date, poster, point, mediaType }) => {
         )}
         <ImageComponent
           className="w-full rounded-lg"
-          src={`https://media.themoviedb.org/t/p/w500/${poster}`}
+          src={poster && `https://media.themoviedb.org/t/p/w500/${poster}`}
           width={210}
           height={300}
         />
