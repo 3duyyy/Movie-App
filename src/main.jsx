@@ -7,12 +7,14 @@ import RootLayout from "@pages/RootLayout";
 // import MovieDetail from "@pages/MovieDetail";
 // import TVShowDetail from "@pages/TVShowDetail.jsx";
 // import PeoplePage from "@pages/PeoplePage";
+// import SearchPage from "@pages/SearchPage";
 import ModalProvider from "@context/ModalProvider";
 
 const HomePage = lazy(() => import("@pages/HomePage"));
 const MovieDetail = lazy(() => import("@pages/MovieDetail"));
 const TVShowDetail = lazy(() => import("@pages/TVShowDetail.jsx"));
 const PeoplePage = lazy(() => import("@pages/PeoplePage"));
+const SearchPage = lazy(() => import("@pages/SearchPage"));
 
 const router = createBrowserRouter([
   {
@@ -31,7 +33,7 @@ const router = createBrowserRouter([
         element: <TVShowDetail />,
       },
       {
-        path: "people/:id",
+        path: "/people/:id",
         element: <PeoplePage />,
         loader: async ({ params }) => {
           const res = await fetch(
@@ -45,6 +47,10 @@ const router = createBrowserRouter([
           );
           return res;
         },
+      },
+      {
+        path: "/search",
+        element: <SearchPage />,
       },
     ],
   },

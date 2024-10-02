@@ -56,7 +56,7 @@ const MovieDetail = () => {
         <div className="container">
           <div className="flex-[2]">
             <ActorList actors={movieInfo.credits?.cast || []} />
-            <RelatedMediaList mediaList={relatedMovies} title="More Like This" />
+            <RelatedMediaList mediaList={relatedMovies} title="More Like This" className="mt-8" />
           </div>
           <div className="flex-1">
             <MovieInformation movieInfo={movieInfo} />

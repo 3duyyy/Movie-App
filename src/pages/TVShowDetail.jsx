@@ -67,7 +67,7 @@ const TVShowDetail = () => {
               }))}
             />
             <SeasonList seasons={(tvInfo.seasons || []).slice().reverse()} />
-            <RelatedMediaList mediaList={relatedTVShow} title="More Like This" />
+            <RelatedMediaList mediaList={relatedTVShow} title="More Like This" className="mt-8" />
           </div>
           <div className="flex-1">
             <TVShowInformation tvInfo={tvInfo} />
